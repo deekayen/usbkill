@@ -1,7 +1,7 @@
 # usbkill
 
-usbkill waits for a change on your USB ports, then immediately turns off
-your computer without prompts or signaling other open applications.
+`usbkill` waits for a change on your USB ports, then immediately turns
+off your computer without prompts or signaling other open applications.
 Depending on your point of view, it's an un-clean shutdown and may
 trigger fsck or other file integrity checks on re-start.
 
@@ -11,7 +11,7 @@ To run: `sudo usbkill.sh`
 
 ## Linux
 
-Try adding the usbkill.sh script to your `/etc/rc.local`. Any USB device
+Try adding `usbkill.sh` to your `/etc/rc.local`. Any USB device
 changes not whitelisted in `/etc/usbkill/settings` will cause your
 computer to shutdown.
 
@@ -36,6 +36,12 @@ Make sure to use whole-disk encryption! Otherwise, your adversary will
 just re-start the computer and make a copy of all your files.
 
 [0] http://www.amazon.com/gp/product/B00MTZY7Y4/ref=as_li_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B00MTZY7Y4&linkCode=as2&tag=deekayen-20&linkId=H362AOTAVTL2CVPZ
+
+### Other nasty ideas
+
+Bash can trap signals to close `usbkill`, however a `kill -9` probably
+won't get trapped. The other signals could still be trapped
+and cause the computer to shutdown when the script is signaled to close.
 
 # Contact
 david@dkn.email - 7E38 B4FF 0A7C 2F28 5C31  2C8C EFD7 EC8D B5D4 C172
