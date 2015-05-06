@@ -54,7 +54,7 @@ kill_computer () {
 		Darwin)
 			# Flushes to disk, then un-gracefully shuts down without signaling open apps
 			# https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man8/halt.8.html
-			killall loginwindow && halt -q
+			killall loginwindow Finder && halt -q
 			;;
 		DragonFly)
 			# http://leaf.dragonflybsd.org/cgi/web-man?command=halt&section=ANY
