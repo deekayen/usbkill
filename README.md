@@ -7,7 +7,7 @@ trigger fsck or other file integrity checks on re-start.
 
 It works on Mac OS X and Ubuntu.
 
-To run: sudo usbkill.sh
+To run: `sudo usbkill.sh`
 
 ## Why?
 This is for the security paranoid - if law enforcement surprises you or
