@@ -88,8 +88,6 @@ kill_computer () {
 			exit 1
 			;;
 	esac
-
-	halt -q
 }
 
 listusb () {
