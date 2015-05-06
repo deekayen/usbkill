@@ -15,7 +15,7 @@
 
 # Contact: david@dkn.email - 7E38 B4FF 0A7C 2F28 5C31  2C8C EFD7 EC8D B5D4 C172
 
-LOGPATH="/var/log"
+LOGPATH="/var/log/usbkill"
 LOGFILE="/var/log/usbkill/usbkill.log"
 SETTINGSPATH="/etc/usbkill"
 SETTINGSFILE="/etc/usbkill/settings"
@@ -40,7 +40,8 @@ log () {
 
 	# Log current usb state:
 	echo 'Current state:' >> $LOGFILE
-	system_profiler SPUSBDataType >> $LOGFILE
+	listusb
+	echo $DEVICES >> $LOGFILE
 }
 
 kill_computer () {
@@ -69,19 +70,18 @@ kill_computer () {
 	halt -q
 }
 
-lsusb () {
-
-    case "$(uname -s)" in
-    	Darwin)
-			# A Yosemite version of the command 'lsusb' that returns a trimmed list of connected usbids
+listusb () {
+  case "$(uname -s)" in
+		Darwin)
+			# A Yosemite version of the command 'lsusb' that returns a trimmed list of connected Product IDs
 			DEVICES=( $(system_profiler SPUSBDataType | grep "Product ID:" | awk '{ print $3 }') )
 			;;
 		Linux)
-			## Tested on Ubuntu 15.04
+			# Tested on Ubuntu 15.04 to list Device IDs
 			DEVICES=( $(lsusb | awk '{ print $6 }') )
 			;;
 		*)
-        	echo 'Your operating system is not supported yet. Submit a patch.'
+			echo 'Your operating system is not supported yet. Submit a patch.'
 			log "Unknown operating system. Cannot generate USB ID list."
 			exit 1
 			;;
@@ -129,7 +129,7 @@ monitor () {
 	# Main loop that checks every 'sleep_time' seconds if computer should be killed.
 	# Allows only whitelisted usb devices to connect!
 	# Allows no usb device that wat present during program start to disconnect!
-	lsusb
+	listusb
 	startdeviceindicies=${!DEVICES[*]}
 	for index in $startdeviceindicies; do
 		start_devices[$index]=${DEVICES[$index]}
@@ -137,20 +137,19 @@ monitor () {
 	load_settings
 
 	# Write to logs that loop is starting:
-	log "Started patrolling the usb ports every ", sleep_time, " seconds."
+	log "Started patrolling the USB ports every $sleep seconds."
 
 	# Main loop
 	while true
 	do
 		# List the current USB devices
-		lsusb
+		listusb
 		currentdeviceindicies=${!DEVICES[*]}
 		for index in $currentdeviceindicies; do
 			current_devices[$index]=${DEVICES[$index]}
 		done
 
 		# Check that all current devices are in the set of acceptable devices
-		# https://stackoverflow.com/questions/3685970/check-if-an-array-contains-a-value
 		for i in "${current_devices[@]}"; do
 			# Was the current device
 			if [[ ! "${start_devices[@]}" =~ "$i" && ! "${whitelist[@]}" =~ "$i" ]]; then
@@ -200,6 +199,10 @@ fi
 # Make sure there is a logging folder
 if [ ! -d $LOGPATH ]; then
 	mkdir $LOGPATH
+fi
+
+if [ ! -f $LOGFILE ]; then
+	touch $LOGFILE
 fi
 
 # Make sure settings file is available
