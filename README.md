@@ -62,4 +62,13 @@ shutdown since a normal shutdown would still signal the script to close
 and thereby cause a premature `poweroff` event.
 
 # Contact
-[david@dkn.email](mailto:david@dkn.email) - 7E38 B4FF 0A7C 2F28 5C31  2C8C EFD7 EC8D B5D4 C172
+
+[david@dkn.email](mailto:david@dkn.email)
+
+## PGP/GPG Fingerprint
+
+7E38 B4FF 0A7C 2F28 5C31  2C8C EFD7 EC8D B5D4 C172
+
+## Issues
+
+https://github.com/deekayen/usbkill
