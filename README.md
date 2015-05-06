@@ -1,26 +1,35 @@
 # usbkill
 
-usbkill waits for a change on your usb ports, then immediately kills your computer.  Anti forensic, usb -> kill
+usbkill waits for a change on your USB ports, then immediately turns off
+your computer without prompts or signaling other open applications.
+Depending on your point of view, it's an un-clean shutdown and may
+trigger fsck or other file integrity checks on re-start.
 
+It works on Mac OS X and Ubuntu.
 
-Unfinished project! Expect improvements to come.
+To run: sudo usbkill.sh
 
-But it does work and is effective.
+## Why?
+This is for the security paranoid - if law enforcement surprises you or
+confiscates your laptop from you when you are at a public library.
 
-To run: sudo python3 usbkill.py
+Law enforcement will use a "mouse jiggler" [0] to keep the screensaver
+and sleep mode from activating. If someone inserts a mouse jiggler, it
+would be much more secure for the laptop to immediately turn off,
+re-protecting all your data with your whole-disk encryption.
 
+The usbkill daemon monitors for devices that are inserted since it
+started running and for devices that were removed since it started.
 
-# Why?
-In case the police comes busting in, or steals your laptop from you when you are at a public library (as with Ross).
-The police will use a `mouse jiggler' [0] to keep the screensaver and sleep mode from activating. If this happens you would like your computer to shut down immediately. Additionally, you may use a cord to attach a usb key to your wrist. Then insert the key into your computer and start usbkill. If they then steal your computer, the usb will be removed and the computer shuts down immediately.
+A settings file at `/etc/usbkill/settings` can be configured to use a
+list of whitelisted USB devices so that you may still use an external
+mouse or USB storage device you trust. The check interval can also be
+modified - the default is to check every second.
 
-Custom commands for when a usb change is observed will be implemented later.
+Make sure to use whole-disk encryption! Otherwise, your adversary will
+just re-start the computer and make a copy of all your files.
 
-Make sure to use full disk encryption! Otherwise they will get in anyway. 
-
-[0] http://www.amazon.com/Cru-dataport-Jiggler-Automatic-keyboard-Activity/dp/B00MTZY7Y4/ref=pd_bxgy_pc_text_y/190-3944818-7671348
+[0] http://www.amazon.com/gp/product/B00MTZY7Y4/ref=as_li_tl?ie=UTF8&camp=1789&creative=390957&creativeASIN=B00MTZY7Y4&linkCode=as2&tag=deekayen-20&linkId=H362AOTAVTL2CVPZ
 
 # Contact
-hephaestos@riseup.net - 8764 EF6F D5C1 7838 8D10 E061 CF84 9CE5 42D0 B12B
-
-
+david@dkn.email - 7E38 B4FF 0A7C 2F28 5C31  2C8C EFD7 EC8D B5D4 C172
