@@ -60,8 +60,12 @@ kill_computer () {
 			## Tested on Ubuntu 15.04
 			poweroff -f
 			;;
+		FreeBSD)
+			# Not as dramatic as the others, but it'll cause a shutdown in a hurry
+			shutdown -h now
+			;;
 		*)
-        	echo 'Your operating system is not supported yet. Submit a patch.'
+			echo 'Your operating system is not supported yet. Submit a patch.'
 			log "Unknown operating system. Cannot shutdown list."
 			exit 1
 			;;
