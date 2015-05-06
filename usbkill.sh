@@ -15,7 +15,9 @@
 
 # Contact: david@dkn.email - 7E38 B4FF 0A7C 2F28 5C31  2C8C EFD7 EC8D B5D4 C172
 
+LOGPATH="/var/log"
 LOGFILE="/var/log/usbkill/usbkill.log"
+SETTINGSPATH="/etc/usbkill"
 SETTINGSFILE="/etc/usbkill/settings"
 USAGE=$(cat <<EOF_USAGE
 USAGE: ${SCRIPT} <options>
@@ -72,8 +74,13 @@ lsusb () {
 }
 
 settings_template () {
+	if [ ! -d $SETTINGSPATH ]; then
+		mkdir $SETTINGSPATH
+	fi
+
 	if [ ! -f $SETTINGSFILE ]; then
 		# Pre-populate the settings file if it does not exist yet
+		touch $SETTINGSFILE
 		echo "# whitelist command lists the usb ids that you want whitelisted" >> $SETTINGSFILE
 		echo "# find the correct usbid for your trusted usb using the command 'system_profiler SPUSBDataType'" >> $SETTINGSFILE
 		echo "# Look for the Product ID, like 0x1a10" >> $SETTINGSFILE
@@ -172,8 +179,8 @@ if [[ $EUID != 0 ]]; then
 fi
 
 # Make sure there is a logging folder
-if [ ! -d "/var/log/usbkill"]; then
-	mkdir /var/log/usbkill
+if [ ! -d $LOGPATH ]; then
+	mkdir $LOGPATH
 fi
 
 # Make sure settings file is available
