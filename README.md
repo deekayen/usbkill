@@ -3,7 +3,8 @@
 `usbkill` waits for a change on your USB ports, then immediately turns
 off your computer without prompts or signaling other open applications.
 Depending on your point of view, it's an un-clean shutdown and may
-trigger fsck or other file integrity checks on re-start.
+trigger fsck or other file integrity checks on re-start even though
+the `poweroff` signal syncs open files to disk first.
 
 It works on Mac OS X and Ubuntu.
 
@@ -42,6 +43,9 @@ just re-start the computer and make a copy of all your files.
 Bash can trap signals to close `usbkill`, however a `kill -9` probably
 won't get trapped. The other signals could still be trapped
 and cause the computer to shutdown when the script is signaled to close.
+Unfortunately, this can cause your computer to always have an unclean
+shutdown since a normal shutdown would still signal the script to close
+and thereby cause a premature `poweroff` event.
 
 # Contact
 david@dkn.email - 7E38 B4FF 0A7C 2F28 5C31  2C8C EFD7 EC8D B5D4 C172
