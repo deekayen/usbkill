@@ -20,6 +20,13 @@ Try adding `usbkill.sh` to your `/etc/rc.local`. Any USB device
 changes not whitelisted in `/etc/usbkill/settings` will cause your
 computer to shutdown.
 
+## Mac OS
+
+Unlike the
+[original Python-based version](https://github.com/hephaest0s/usbkill),
+this Bash version does not require any additional programs like
+`python3` or `lsusb` to be installed.
+
 ## Why?
 This is for the security paranoid - if law enforcement surprises you or
 confiscates your laptop from you when you are at a public library.
