@@ -49,24 +49,41 @@ kill_computer () {
 	log "Detected usb change. Dumping system_profiler and killing computer..."
 
 	# This function will poweroff your computer immediately
-    case "$(uname -s)" in
-    	Darwin)
+	case "$(uname -s)" in
+		# https://en.wikipedia.org/wiki/Uname
+		Darwin)
 			# Flushes to disk, then un-gracefully shuts down without signaling open apps
+			# https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man8/halt.8.html
+			halt -q
+			;;
+		DragonFly)
+			# http://leaf.dragonflybsd.org/cgi/web-man?command=halt&section=ANY
+			halt -q
+			;;
+		FreeBSD)
+			# https://www.freebsd.org/cgi/man.cgi?query=halt&apropos=0&sektion=0&manpath=FreeBSD+10.1-RELEASE&arch=default&format=html
 			halt -q
 			;;
 		Linux)
 			# Sync the filesystem so that the recent log entry does not get lost.
+			# http://manpages.ubuntu.com/manpages/lucid/man8/sync.8.html
 			sync
-			## Tested on Ubuntu 15.04
+			# Tested on Ubuntu 15.04
+			# http://manpages.ubuntu.com/manpages/natty/man8/halt.8.html
 			poweroff -f
 			;;
-		FreeBSD)
-			# Not as dramatic as the others, but it'll cause a shutdown in a hurry
-			shutdown -h now
+		NetBSD)
+			# http://netbsd.gw.com/cgi-bin/man-cgi?sync++NetBSD-current
+			sync
+			# http://netbsd.gw.com/cgi-bin/man-cgi?halt++NetBSD-current
+			halt -q
+		OpenBSD)
+			# http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/halt.8?query=halt
+			halt -q
 			;;
 		*)
 			echo 'Your operating system is not supported yet. Submit a patch.'
-			log "Unknown operating system. Cannot shutdown list."
+			log "Unknown operating system. Cannot halt."
 			exit 1
 			;;
 	esac
