@@ -77,6 +77,7 @@ kill_computer () {
 			sync
 			# http://netbsd.gw.com/cgi-bin/man-cgi?halt++NetBSD-current
 			halt -q
+			;;
 		OpenBSD)
 			# http://www.openbsd.org/cgi-bin/man.cgi/OpenBSD-current/man8/halt.8?query=halt
 			halt -q
