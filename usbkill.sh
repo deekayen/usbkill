@@ -47,10 +47,25 @@ kill_computer () {
 	# Log what is happening:
 	log "Detected usb change. Dumping system_profiler and killing computer..."
 
-	# Sync the filesystem so that the recent log entry does not get lost.
-	sync
-
 	# This function will poweroff your computer immediately
+    case "$(uname -s)" in
+    	Darwin)
+			# Flushes to disk, then un-gracefully shuts down without signaling open apps
+			halt -q
+			;;
+		Linux)
+			# Sync the filesystem so that the recent log entry does not get lost.
+			sync
+			## Tested on Ubuntu 15.04
+			poweroff -f
+			;;
+		*)
+        	echo 'Your operating system is not supported yet. Submit a patch.'
+			log "Unknown operating system. Cannot shutdown list."
+			exit 1
+			;;
+	esac
+
 	halt -q
 }
 
@@ -59,11 +74,11 @@ lsusb () {
     case "$(uname -s)" in
     	Darwin)
 			# A Yosemite version of the command 'lsusb' that returns a trimmed list of connected usbids
-			DEVICES=( $(system_profiler SPUSBDataType | grep "Product ID:" | awk '{ print $3 }' "$0") )
+			DEVICES=( $(system_profiler SPUSBDataType | grep "Product ID:" | awk '{ print $3 }') )
 			;;
 		Linux)
 			## Tested on Ubuntu 15.04
-			DEVICES=( $(lsusb | awk '{ print $6 }' "$0" ) )
+			DEVICES=( $(lsusb | awk '{ print $6 }') )
 			;;
 		*)
         	echo 'Your operating system is not supported yet. Submit a patch.'
@@ -82,7 +97,8 @@ settings_template () {
 		# Pre-populate the settings file if it does not exist yet
 		touch $SETTINGSFILE
 		echo "# whitelist command lists the usb ids that you want whitelisted" >> $SETTINGSFILE
-		echo "# find the correct usbid for your trusted usb using the command 'system_profiler SPUSBDataType'" >> $SETTINGSFILE
+		echo "# find the correct usbid for your trusted usb using" >> $SETTINGSFILE
+		echo "# the command 'system_profiler SPUSBDataType'" >> $SETTINGSFILE
 		echo "# Look for the Product ID, like 0x1a10" >> $SETTINGSFILE
 		echo "# Be warned! other parties can copy your trusted usbid to another usb device!" >> $SETTINGSFILE
 		echo "# Use whitelist command and single space separation as follows:" >> $SETTINGSFILE
@@ -114,7 +130,10 @@ monitor () {
 	# Allows only whitelisted usb devices to connect!
 	# Allows no usb device that wat present during program start to disconnect!
 	lsusb
-	start_devices=$DEVICES
+	startdeviceindicies=${!DEVICES[*]}
+	for index in $startdeviceindicies; do
+		start_devices[$index]=${DEVICES[$index]}
+	done
 	load_settings
 
 	# Write to logs that loop is starting:
@@ -125,37 +144,38 @@ monitor () {
 	do
 		# List the current USB devices
 		lsusb
-		current_devices=$DEVICES
+		currentdeviceindicies=${!DEVICES[*]}
+		for index in $currentdeviceindicies; do
+			current_devices[$index]=${DEVICES[$index]}
+		done
 
 		# Check that all current devices are in the set of acceptable devices
 		# https://stackoverflow.com/questions/3685970/check-if-an-array-contains-a-value
-		for i in "${current_devices[@]}"
-		do
+		for i in "${current_devices[@]}"; do
 			# Was the current device
 			if [[ ! "${start_devices[@]}" =~ "$i" && ! "${whitelist[@]}" =~ "$i" ]]; then
-				echo "Kill placeholder: Unauthorized deivce found!"
-				# kill_computer
+				kill_computer
 			fi
 		done
 
 
 		# Check that all start devices are still present in current devices
-		for i in "${start_devices[@]}"
-		do
+		for i in "${start_devices[@]}"; do
+			echo $i
 			if [[ ! "${current_devices[@]}" =~ "$i" ]]; then
-				echo "Kill placeholder: Start device went missing."
-				# kill_computer
+				kill_computer
 			fi
 		done
 
-		sleep $sleep_time
+        current_devices=( )
+		sleep $sleep
 	done
 }
 
 signaled () {
 	echo "Exiting because exit signal was received"
 	log "Exiting because exit signal was received"
-	return 0
+	exit 0
 }
 
 # parse the command line
@@ -190,5 +210,5 @@ trap signaled SIGHUP SIGINT SIGTERM SIGQUIT
 # add an option for trap to cause a shutdown
 
 # Start main loop
-#monitor
+monitor
 
