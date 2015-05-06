@@ -9,6 +9,12 @@ It works on Mac OS X and Ubuntu.
 
 To run: `sudo usbkill.sh`
 
+## Linux
+
+Try adding the usbkill.sh script to your `/etc/rc.local`. Any USB device
+changes not whitelisted in `/etc/usbkill/settings` will cause your
+computer to shutdown.
+
 ## Why?
 This is for the security paranoid - if law enforcement surprises you or
 confiscates your laptop from you when you are at a public library.
