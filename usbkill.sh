@@ -4,7 +4,7 @@
 #    it under the terms of the GNU General Public License as published by
 #    the Free Software Foundation, either version 3 of the License, or
 #    (at your option) any later version.
- 
+
 #    This program is distributed in the hope that it will be useful,
 #    but WITHOUT ANY WARRANTY; without even the implied warranty of
 #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -13,7 +13,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Contact: david@dkn.email - 7680R/B5D4C172
+# Contact: david@dkn.email - 7E38 B4FF 0A7C 2F28 5C31  2C8C EFD7 EC8D B5D4 C172
 
 LOGFILE="/var/log/usbkill/usbkill.log"
 SETTINGSFILE="/etc/usbkill/settings"
@@ -35,7 +35,7 @@ print_usage () {
 log () {
 	# Log the message that needed to be logged:
 	echo "$(date) $1" >> $LOGFILE
-	
+
 	# Log current usb state:
 	echo 'Current state:' >> $LOGFILE
 	system_profiler SPUSBDataType >> $LOGFILE
@@ -44,10 +44,10 @@ log () {
 kill_computer () {
 	# Log what is happening:
 	log "Detected usb change. Dumping system_profiler and killing computer..."
-	
+
 	# Sync the filesystem so that the recent log entry does not get lost.
 	sync
-	
+
 	# This function will poweroff your computer immediately
 	halt -q
 }
@@ -109,10 +109,10 @@ monitor () {
 	lsusb
 	start_devices=$DEVICES
 	load_settings
-	
+
 	# Write to logs that loop is starting:
 	log "Started patrolling the usb ports every ", sleep_time, " seconds."
-	
+
 	# Main loop
 	while true
 	do
@@ -131,7 +131,7 @@ monitor () {
 			fi
 		done
 
-				
+
 		# Check that all start devices are still present in current devices
 		for i in "${start_devices[@]}"
 		do
@@ -140,7 +140,7 @@ monitor () {
 				# kill_computer
 			fi
 		done
-				
+
 		sleep $sleep_time
 	done
 }
