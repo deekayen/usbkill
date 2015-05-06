@@ -161,7 +161,6 @@ monitor () {
 
 		# Check that all start devices are still present in current devices
 		for i in "${start_devices[@]}"; do
-			echo $i
 			if [[ ! "${current_devices[@]}" =~ "$i" ]]; then
 				kill_computer
 			fi
