@@ -15,10 +15,10 @@
 
 # Contact: david@dkn.email - 7E38 B4FF 0A7C 2F28 5C31  2C8C EFD7 EC8D B5D4 C172
 
-LOGPATH="/var/log/usbkill"
-LOGFILE="/var/log/usbkill/usbkill.log"
-SETTINGSPATH="/etc/usbkill"
-SETTINGSFILE="/etc/usbkill/settings"
+LOGPATH="usbkill_log/"
+LOGFILE="usbkill_log/usbkill.log"
+SETTINGSPATH="usbkill_log/settings/"
+SETTINGSFILE="usbkill_log/settings/settings"
 USAGE=$(cat <<EOF_USAGE
 USAGE: ${SCRIPT} <options>
 
@@ -70,7 +70,7 @@ kill_computer () {
 			sync
 			# Tested on Ubuntu 15.04
 			# http://manpages.ubuntu.com/manpages/natty/man8/halt.8.html
-			poweroff -f
+			systemctl poweroff
 			;;
 		NetBSD)
 			# http://netbsd.gw.com/cgi-bin/man-cgi?sync++NetBSD-current
@@ -209,12 +209,12 @@ while [ "${1}" != "" ]; do
   esac
 done
 
-# Check if program is run as root, else exit.
+#  Root is not needed with systemctl poweroff on debian / ubuntu      Check if program is run as root, else exit.
 # Root is needed to power off the computer.
-if [[ $EUID != 0 ]]; then
-    echo "This program needs to run as root."
-    exit 1
-fi
+#if [[ $EUID != 0 ]]; then
+#    echo "This program needs to run as root."
+#    exit 1
+#fi
 
 # Make sure there is a logging folder
 if [ ! -d $LOGPATH ]; then
