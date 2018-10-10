@@ -36,7 +36,7 @@ confiscates your laptop from you when you are at a public library.
 to keep the screensaver and sleep mode from activating. If someone
 inserts a mouse jiggler, it would be much more secure for the laptop to
 immediately turn off, re-protecting all your data with your whole-disk
-encryption.
+encryption.  You can also use this as a kill switch by quickly removing a USB device to turn the computer off and prevent cold boot attacks on RAM.  
 * Blocking unauthorized USB devices prevents installing backdoors or
 malware on your computer or to retrieve documents from your computer via
 USB.
