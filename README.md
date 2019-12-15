@@ -1,5 +1,7 @@
 # usbkill
 
+[![Project Status: Concept – Minimal or no implementation has been done yet, or the repository is only intended to be a limited example, demo, or proof-of-concept.](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
+
 `usbkill` waits for a change on your USB ports, then immediately turns
 off your computer without prompts or signaling other open applications.
 Depending on your point of view, it's an un-clean shutdown and may
