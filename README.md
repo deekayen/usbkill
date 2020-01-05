@@ -29,6 +29,27 @@ Unlike the
 this Bash version does not require any additional programs like
 `python3` or `lsusb` to be installed.
 
+## Example configuration
+
+The first run will create a default settings file at `/etc/usbkill/settings` with an empty whitelist. On MacOS, check the USB section of the System Information application for the Product ID. Alternatively, run `system_profiler SPUSBDataType` from a terminal to list connected USB devices.
+
+```
+# whitelist command lists the usb ids that you want whitelisted
+# find the correct usbid for your trusted usb using
+# the command 'system_profiler SPUSBDataType'
+# Look for the Product ID, like 0x1a10
+# Be warned! other parties can copy your trusted usbid to another usb device!
+# Use whitelist command and single space separation as follows:
+# for Mac:
+# whitelist=( "0x0024" "0x8510" "0x0024" "0x2512" "0x4500" "0x8286" "0x0262" )
+# for Linux:
+# whitelist=( "8087:8000" "1d6b:0002" "0781:5580" "1d6b:0003" "0489:e056" "1bcf:2c67" "1d6b:0002" )
+whitelist=( )
+
+# allow for a certain amount of sleep time between checks, e.g. 1 second:
+sleep=1
+```
+
 ## Why?
 This is for the security paranoid - if law enforcement surprises you or
 confiscates your laptop from you when you are at a public library.
